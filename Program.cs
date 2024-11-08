@@ -14,7 +14,7 @@ static class Program
     static string pattern = @"^(?i)GE\d{2}[A-Z]{2}0{7}\d{9}$";
 
 
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         //regex pattern
         /*Regex inputAccNumber = new Regex(pattern);
@@ -119,10 +119,10 @@ static class Program
 
         };
 
-        var labels = KMeans.Cluster(AccNumbers, data, 6);
+        /*var labels = KMeans.Cluster(AccNumbers, data, 6);
         for (int i = 0; i < AccNumbers.Length; i++)
             Console.WriteLine($"{AccNumbers[i]} is in cluster {labels[i]}");
-
+*/
 
         /*
                 int result = BinarySearch.Binary_SearchRecursive(AccNumbers, 0, AccNumbers.Length - 1, "ge60BG0000000366050958");
@@ -181,11 +181,11 @@ static class Program
         };
 
 
-        var (path, time) = Dijkstra.FindShortestPath(Fullgraph, "FirstAcc", "SecondAcc");
+        /*var (path, time) = Dijkstra.FindShortestPath(Fullgraph, "FirstAcc", "SecondAcc");
 
         Console.WriteLine($"{string.Join(" -> ", path)}");
         Console.WriteLine($"Total Time: {time} minutes");
-
+*/
 
 
         //anomalydetection
@@ -203,18 +203,18 @@ static class Program
 
         //linear forecast
 
-        var monthlyTotals = transactions
-            .GroupBy(t => new DateTime(t.Date.Year, t.Date.Month, 1))
-            .Select(g => new { Date = g.Key, Total = g.Sum(t => t.Amount) })
-            .OrderBy(g => g.Date)
-            .ToList();
+        /*  var monthlyTotals = transactions
+              .GroupBy(t => new DateTime(t.Date.Year, t.Date.Month, 1))
+              .Select(g => new { Date = g.Key, Total = g.Sum(t => t.Amount) })
+              .OrderBy(g => g.Date)
+              .ToList();*/
 
         // 2. Prepare data for linear regression
-        var x = Enumerable.Range(1, monthlyTotals.Count).Select(i => (double)i).ToArray(); // Time periods
-        var y = monthlyTotals.Select(mt => mt.Total).ToArray(); // Monthly totals
-
+        /* var x = Enumerable.Range(1, monthlyTotals.Count).Select(i => (double)i).ToArray(); // Time periods
+         var y = monthlyTotals.Select(mt => mt.Total).ToArray(); // Monthly totals
+ */
         // 3. Perform linear regression
-        var (slope, intercept) = LinearReg.LinearRegression(x, y);
+        /*var (slope, intercept) = LinearReg.LinearRegression(x, y);
 
         
         Console.WriteLine("Forecast for the next 3 months:");
@@ -223,7 +223,20 @@ static class Program
             double forecastedValue = slope * (x.Length + i) + intercept;
             DateTime forecastDate = monthlyTotals.Last().Date.AddMonths(i);
             Console.WriteLine($"{forecastDate:yyyy-MM}: {forecastedValue:F2}");
-        }
+        }*/
 
+        // exchange rates
+        string fromCurrency = "EUR";
+        string toCurrency = "USD";
+
+        double exchangeRate = await ExchangeRates.GetExchangeRateAsync(fromCurrency, toCurrency);
+        if (exchangeRate > 0)
+        {
+            Console.WriteLine($"Exchange Rate from {fromCurrency} to {toCurrency}: {exchangeRate}");
+        }
+        else
+        {
+            Console.WriteLine("Failed to retrieve the exchange rate.");
+        }
     }
 }
